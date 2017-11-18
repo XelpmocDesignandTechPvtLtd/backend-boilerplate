@@ -7,7 +7,6 @@ describe("create", () => {
     const user2 = await db.create("User 1", "my other password");
     expect(user1.id).toBe("0");
     expect(user2.id).toBe("1");
-    expect(true).toBe(false);
   });
 
   test("Does not send back password hash field", async () => {

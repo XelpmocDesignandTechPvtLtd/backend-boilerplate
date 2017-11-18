@@ -8,6 +8,8 @@
     "start":
       "yarn run build && nodemon --exec \"NODE_ENV=dev pm2 start build/index.js\"",
     "test": "jest",
+    "deploy":
+      "yarn run build && NODE_ENV=dev pm2 deploy ecosystem.config.js production",
     "lint": "eslint 'src/**/*.js'",
     "fix-lint": "prettier --write './src/**/*.js' && npm run-script lint"
   },
