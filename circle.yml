@@ -8,3 +8,8 @@ dependencies:
 test:
   override:
     - yarn test
+deployment:
+  staging:
+    branch: master
+    commands:
+      - yarn deploy
