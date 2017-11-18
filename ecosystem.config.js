@@ -12,8 +12,8 @@ module.exports = {
       key: "~/.ssh/tutorial.pem",
       ref: "origin/master",
       repo: "git@github.com:prakashsanker/api-express-boilerplate.git",
-      path: "/home/ubuntu/citest",
-      "post-deploy": "yarn install && pm2 startOrRestart ecosystem.config.js"
+      path: "/home/ubuntu/citest/build",
+      "post-deploy": "yarn install && yarn run start"
     }
   }
 };
