@@ -6,7 +6,7 @@
     "dev-server": "nodemon --exec \"babel-node --inspect src\"",
     "build": "babel -d ./build src",
     "start":
-      "yarn run-script build && nodemon --exec \"NODE_ENV=production node build/index.js\"",
+      "yarn run build && nodemon --exec \"NODE_ENV=dev pm2 start build/index.js\"",
     "test": "jest",
     "lint": "eslint 'src/**/*.js'",
     "fix-lint": "prettier --write './src/**/*.js' && npm run-script lint"
