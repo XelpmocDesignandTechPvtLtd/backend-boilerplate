@@ -5,20 +5,16 @@
   "scripts": {
     "dev-server": "nodemon --exec \"babel-node --inspect src\"",
     "build": "babel -d ./build src",
-    "start": "yarn run build && nodemon --exec \"NODE_ENV=dev pm2 start build/index.js\"",
+    "start":
+      "yarn run build && pm2 delete -s citest || : pm2 start build/index.js --name=citest",
     "test": "jest",
     "deploy": "pm2 deploy ecosystem.config.js production",
     "lint": "eslint 'src/**/*.js'",
     "fix-lint": "prettier --write './src/**/*.js' && npm run-script lint"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json"
-    ],
-    "testMatch": [
-      "**/?(*.)(spec|test).js"
-    ],
+    "moduleFileExtensions": ["js", "json"],
+    "testMatch": ["**/?(*.)(spec|test).js"],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
@@ -27,10 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/osdiab/gymi-website-node.git"
   },
-  "keywords": [
-    "frontend",
-    "boilerplate"
-  ],
+  "keywords": ["frontend", "boilerplate"],
   "author": "Omar Diab (github/osdiab) and Rona Wo (github/YanrongWo)",
   "bugs": {
     "url": "https://github.com/osdiab/gymi-website-node/issues"
