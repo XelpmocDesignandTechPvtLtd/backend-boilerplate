@@ -4,7 +4,7 @@ machine:
       8.2.0
 dependencies:
   override:
-    - yarn
+    - yarn install --production=false
 test:
   override:
     - yarn test
