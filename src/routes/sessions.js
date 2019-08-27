@@ -8,6 +8,7 @@ export const authenticate = route(
     // TODO: this is a stub implementation that just checks if the password
     // is the same as the username. Implement real authentication, then return
     // user metadata in the JSON web token as you desire.
+    console.log(req.body);
     const { id, password } = req.body;
 
     const user = await usersDB.getUserByCredentials(id, password);

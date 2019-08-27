@@ -3,6 +3,9 @@ import bcrypt from "bcryptjs";
 const BCRYPT_ROUNDS = 10;
 
 export function comparePassword(password, hash) {
+  console.log("COMPARE PASSWORD");
+  console.log(password);
+  console.log(hash);
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, hash, (err, match) => {
       if (err) {

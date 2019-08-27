@@ -5,16 +5,20 @@
   "scripts": {
     "dev-server": "nodemon --exec \"babel-node --inspect src\"",
     "build": "babel -d ./build src",
-    "start":
-      "yarn run build && pm2 delete -s citest || : pm2 start build/index.js --name=citest",
+    "start": "yarn run build && pm2 delete -s citest || : pm2 start build/index.js --name=citest",
     "test": "jest",
     "deploy": "pm2 deploy ecosystem.config.js production",
     "lint": "eslint 'src/**/*.js'",
     "fix-lint": "prettier --write './src/**/*.js' && npm run-script lint"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json"],
-    "testMatch": ["**/?(*.)(spec|test).js"],
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "testMatch": [
+      "**/?(*.)(spec|test).js"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
@@ -23,7 +27,10 @@
     "type": "git",
     "url": "git+https://github.com/osdiab/gymi-website-node.git"
   },
-  "keywords": ["frontend", "boilerplate"],
+  "keywords": [
+    "frontend",
+    "boilerplate"
+  ],
   "author": "Omar Diab (github/osdiab) and Rona Wo (github/YanrongWo)",
   "bugs": {
     "url": "https://github.com/osdiab/gymi-website-node/issues"
@@ -40,8 +47,15 @@
     "express": "^4.16.1",
     "express-force-ssl": "^0.3.2",
     "express-request-language": "^1.1.12",
+    "http-status-codes": "^1.3.2",
+    "install": "^0.13.0",
     "jsonwebtoken": "^8.0.1",
-    "node-fetch": "^1.7.3"
+    "mysql2": "^1.6.5",
+    "node-fetch": "^1.7.3",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.16.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.1",

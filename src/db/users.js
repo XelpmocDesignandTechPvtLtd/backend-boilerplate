@@ -7,8 +7,12 @@
  */
 
 import { hashPassword, comparePassword } from "../lib/crypto";
-
-const PUBLIC_FIELDS = ["id", "name"];
+import BaseModel from "./base";
+import UserSchema from "./user.schema";
+import uuid from "uuid";
+import HttpStatus from "http-status-codes";
+import { ApplicationError } from "../lib/errors";
+const PUBLIC_FIELDS = ["id", "email"];
 
 const filterFields = (toFilter, allowedFields) => {
   return allowedFields.reduce((memo, field) => {
@@ -16,12 +20,11 @@ const filterFields = (toFilter, allowedFields) => {
   }, {});
 };
 
-export class UsersDB {
-  // This is where the users are stored. In a real app, use an actual
-  // database, not just a varaible
-  users = [];
-  currentId = 0;
-
+export class UsersDB extends BaseModel {
+  constructor() {
+    super();
+    this.model = this.connection.define("User", UserSchema);
+  }
   /**
    * Finds a user based on an id/password pair. If user doesn't exist
    * or password doesn't match, this function returns null.
@@ -29,15 +32,30 @@ export class UsersDB {
    * @param {string} password user's password
    */
   getUserByCredentials = async (id, password) => {
-    const user = await this.getUserById(id, false);
-    if (!user) {
-      return null;
-    }
+    console.log("GET USER BY CREDENTIALS");
+    console.log(id);
+    console.log(password);
+    try {
+      const user = await this.getUserById(id, false);
+      console.log("FOUNDER USER");
+      console.log(user);
+      if (!user) {
+        throw new ApplicationError(
+          "User not found",
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      }
+      console.log("POST USER");
 
-    if (await comparePassword(password, user.passwordHash)) {
-      return filterFields(user, PUBLIC_FIELDS);
+      if (await comparePassword(password, user.password)) {
+        console.log("TEST");
+        const test = filterFields(user, PUBLIC_FIELDS);
+        console.log(test);
+        return test;
+      }
+    } catch (e) {
+      throw e;
     }
-    return null;
   };
 
   /**
@@ -48,39 +66,40 @@ export class UsersDB {
    * fields. defaults to true
    */
   getUserById = async (id, filterPrivateFields = true) => {
-    const user = this.users.find(user => user.id === id);
-    if (!user) {
-      return null;
+    try {
+      const foundUser = await this.model.findOne({
+        raw: true,
+        where: {
+          id
+        }
+      });
+      if (filterPrivateFields) {
+        return filterFields(foundUser, PUBLIC_FIELDS);
+      }
+      return foundUser;
+    } catch (e) {
+      throw new ApplicationError(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    if (filterPrivateFields) {
-      return filterFields(user, PUBLIC_FIELDS);
-    }
-    return user;
-  };
-
-  /**
-   * Lists users stored in the database
-   */
-  list = async () => {
-    // don't return entire users as stored in the database, because
-    // we don't want to send password hashes to end users; only
-    // return the public fields, as defined above.
-    return this.users.map(user => filterFields(user, PUBLIC_FIELDS));
   };
 
   /**
    * Creates a new user and stores it in the database.
-   * @param {string} name the new user's name
+   * @param {string} userName the new user's userName
    * @param {string} password the new user's password
    */
-  create = async (name, password) => {
+  create = async (email, password) => {
+    const newUserId = uuid.v4();
     const newUser = {
-      id: `${this.currentId++}`, // increment the latest id, use it as a string
-      name,
-      passwordHash: await hashPassword(password)
+      id: newUserId,
+      email,
+      password: await hashPassword(password)
     };
-    this.users = this.users.concat(newUser);
-    return filterFields(newUser, PUBLIC_FIELDS);
+    try {
+      const createdUser = await this.model.create(newUser);
+      return filterFields(createdUser, PUBLIC_FIELDS);
+    } catch (e) {
+      throw new ApplicationError(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   };
 }
 

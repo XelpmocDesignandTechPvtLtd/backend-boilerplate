@@ -6,12 +6,12 @@ import usersDB from "../db/users";
  */
 export const create = route(
   async (req, res) => {
-    const { name, password } = req.body;
-    const newUser = await usersDB.create(name, password);
+    const { email, password } = req.body;
+    const newUser = await usersDB.create(email, password);
     res.send({ data: newUser });
   },
   {
-    requiredFields: ["name", "password"]
+    requiredFields: ["email", "password"]
   }
 );
 
