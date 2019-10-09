@@ -5,7 +5,11 @@
   "scripts": {
     "dev-server": "nodemon --exec \"babel-node --inspect src\"",
     "build": "babel -d ./build src",
+<<<<<<< HEAD
     "start": "yarn run build && pm2 delete -s citest || : pm2 start build/index.js --name=citest",
+=======
+    "start": "yarn run-script build && nodemon --exec \"NODE_ENV=production node build/index.js\"",
+>>>>>>> 4822b6ac3ac6d6d5dcbc5dd347c368ea9e13ac48
     "test": "jest",
     "deploy": "pm2 deploy ecosystem.config.js production",
     "lint": "eslint 'src/**/*.js'",
